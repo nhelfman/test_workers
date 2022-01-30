@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebWorker testing</title>
+    </head>
+<body>
+    <h1>WebWorker testing</h1>
+    <button id="addWorkerBtn">Add worker</button>
+    <button id="killAllBtn">Kill all workers</button>
+    
+    <div>Number of workers:</div>
+    <div id="numWorkers">0</div>
+
+    
+    <script>
+        let workers = [];
+        document.getElementById('addWorkerBtn').addEventListener('click', () => {
+            const worker = new Worker('worker.js');
+
+            worker.onmessage = ev => {
+                console.log('message from worker: ' + ev.data[0]);
+            };
+
+            worker.postMessage([workers.length]);
+           
+            workers.push(worker);
+            document.getElementById('numWorkers').innerText = workers.length;
+        });
+
+        document.getElementById('killAllBtn').addEventListener('click', () => {
+            workers.forEach(w => w.terminate());
+            workers = [];
+            document.getElementById('numWorkers').innerText = workers.length;
+        });
+
+    </script>
+</body>
+</html>
