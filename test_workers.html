@@ -2,10 +2,25 @@
 <html>
     <head>
         <title>WebWorker testing</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            button {
+                margin: 10px;
+            }
+
+            input {
+                width: 50px;
+            }
+        </style>
     </head>
 <body>
     <h1>WebWorker testing</h1>
     <button id="addWorkerBtn">Add worker</button>
+    <label for="consumeMB">Consume MB</label>
+    <input id="consumeMB" type="number" value="0" title="How many MB each worker consumes (aproximate)">
     <button id="killAllBtn">Kill all workers</button>
     
     <div>Number of workers:</div>
@@ -21,7 +36,9 @@
                 console.log('message from worker: ' + ev.data[0]);
             };
 
-            worker.postMessage([workers.length]);
+            const consumeMB = parseInt(document.getElementById('consumeMB').value);
+
+            worker.postMessage([workers.length, consumeMB]);
            
             workers.push(worker);
             document.getElementById('numWorkers').innerText = workers.length;
